@@ -1,5 +1,6 @@
 package com.analab.locatech.locatech.entities;
 
+import com.analab.locatech.locatech.dtos.PessoaRequestDTO;
 import lombok.*;
 
 @Getter
@@ -14,4 +15,11 @@ public class Pessoa {
     private String cpf;
     private String telefone;
     private String email;
+
+    public Pessoa(PessoaRequestDTO dto) {
+        nome = dto.nome();
+        cpf = dto.cpf();
+        telefone = dto.telefone();
+        email = dto.email();
+    }
 }

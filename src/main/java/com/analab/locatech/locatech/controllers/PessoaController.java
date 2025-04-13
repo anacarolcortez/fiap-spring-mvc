@@ -1,5 +1,6 @@
 package com.analab.locatech.locatech.controllers;
 
+import com.analab.locatech.locatech.dtos.PessoaRequestDTO;
 import com.analab.locatech.locatech.entities.Pessoa;
 import com.analab.locatech.locatech.services.PessoaService;
 import org.slf4j.Logger;
@@ -39,7 +40,7 @@ public class PessoaController {
     }
 
     @PostMapping()
-    public ResponseEntity<Void> savePessoa(@RequestBody Pessoa pessoa){
+    public ResponseEntity<Void> savePessoa(@RequestBody PessoaRequestDTO pessoa){
         logger.info("POST /pessoas");
         this.pessoaService.savePessoa(pessoa);
         return ResponseEntity.status(201).build();
@@ -47,7 +48,7 @@ public class PessoaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updatePessoa(@PathVariable("id") Long id,
-                                              @RequestBody Pessoa pessoa){
+                                              @RequestBody PessoaRequestDTO pessoa){
         logger.info("PUT /pessoas/" + id);
         this.pessoaService.updatePessoa(pessoa, id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

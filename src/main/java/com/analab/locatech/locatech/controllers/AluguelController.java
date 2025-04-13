@@ -1,5 +1,6 @@
 package com.analab.locatech.locatech.controllers;
 
+import com.analab.locatech.locatech.dtos.AluguelRequestDTO;
 import com.analab.locatech.locatech.entities.Aluguel;
 import com.analab.locatech.locatech.services.AluguelService;
 import org.slf4j.Logger;
@@ -39,7 +40,7 @@ public class AluguelController {
     }
 
     @PostMapping()
-    public ResponseEntity<Void> saveAluguel(@RequestBody Aluguel aluguel){
+    public ResponseEntity<Void> saveAluguel(@RequestBody AluguelRequestDTO aluguel){
         logger.info("POST /alugueis");
         this.aluguelService.saveAluguel(aluguel);
         return ResponseEntity.status(201).build();
@@ -47,7 +48,7 @@ public class AluguelController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateAluguel(@PathVariable("id") Long id,
-                                              @RequestBody Aluguel aluguel){
+                                              @RequestBody AluguelRequestDTO aluguel){
         logger.info("PUT /alugueis/" + id);
         this.aluguelService.updateAluguel(aluguel, id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

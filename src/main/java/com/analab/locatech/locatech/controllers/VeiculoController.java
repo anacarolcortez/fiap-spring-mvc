@@ -1,5 +1,6 @@
 package com.analab.locatech.locatech.controllers;
 
+import com.analab.locatech.locatech.dtos.VeiculoRequestDTO;
 import com.analab.locatech.locatech.entities.Veiculo;
 import com.analab.locatech.locatech.services.VeiculoService;
 import org.slf4j.Logger;
@@ -39,7 +40,7 @@ public class VeiculoController {
     }
 
     @PostMapping()
-    public ResponseEntity<Void> saveVeiculo(@RequestBody Veiculo veiculo){
+    public ResponseEntity<Void> saveVeiculo(@RequestBody VeiculoRequestDTO veiculo){
         logger.info("POST /veiculos");
         this.veiculoService.saveVeiculo(veiculo);
         return ResponseEntity.status(201).build();
@@ -47,7 +48,7 @@ public class VeiculoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateVeiculo(@PathVariable("id") Long id,
-                                              @RequestBody Veiculo veiculo){
+                                              @RequestBody VeiculoRequestDTO veiculo){
         logger.info("PUT /veiculos/" + id);
         this.veiculoService.updateVeiculo(veiculo, id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

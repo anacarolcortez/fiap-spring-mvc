@@ -1,7 +1,10 @@
 package com.analab.locatech.locatech.services;
 
+import com.analab.locatech.locatech.dtos.VeiculoRequestDTO;
 import com.analab.locatech.locatech.entities.Veiculo;
 import com.analab.locatech.locatech.repositories.VeiculoRepository;
+import com.analab.locatech.locatech.services.exceptions.ConstraintException;
+import com.analab.locatech.locatech.services.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -23,18 +26,20 @@ public class VeiculoService {
     }
 
     public Optional<Veiculo> findVeiculoById(Long id){
-        return this.veiculoRepository.findById(id);
+        return Optional.ofNullable(this.veiculoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Veículo não encontrado, id: " + id)));
     }
 
-    public void saveVeiculo(Veiculo veiculo){
+    public void saveVeiculo(VeiculoRequestDTO dto){
+        var veiculo = mapper(dto);
         var save = this.veiculoRepository.save(veiculo);
         Assert.state(save == 1, "Erro ao salvar veículo: " + veiculo.getMarca());
     }
 
-    public void updateVeiculo(Veiculo veiculo, Long id){
+    public void updateVeiculo(VeiculoRequestDTO dto, Long id){
+        var veiculo = mapper(dto);
         var update = this.veiculoRepository.update(veiculo, id);
         if (update == 0){
-            throw new RuntimeException("Veículo não encontrado, id: " + id);
+            throw new ResourceNotFoundException("Veículo não encontrado, id: " + id);
         }
     }
 
@@ -42,10 +47,14 @@ public class VeiculoService {
         try {
             var delete = this.veiculoRepository.delete(id);
             if (delete == 0){
-                throw new RuntimeException("Veículo não encontrado, id: " + id);
+                throw new ResourceNotFoundException("Veículo não encontrado, id: " + id);
             }
         } catch (Exception e){
-            throw new RuntimeException("Veículo não pode ser excluído, id: " + id);
+            throw new ConstraintException("Veículo não pode ser excluído, id: " + id);
         }
+    }
+
+    private Veiculo mapper(VeiculoRequestDTO dto){
+        return new Veiculo(dto);
     }
 }
