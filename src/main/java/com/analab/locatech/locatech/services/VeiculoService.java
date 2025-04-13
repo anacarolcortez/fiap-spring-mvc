@@ -39,9 +39,13 @@ public class VeiculoService {
     }
 
     public void deleteVeiculo(Long id){
-        var delete = this.veiculoRepository.delete(id);
-        if (delete == 0){
-            throw new RuntimeException("Veículo não encontrado, id: " + id);
+        try {
+            var delete = this.veiculoRepository.delete(id);
+            if (delete == 0){
+                throw new RuntimeException("Veículo não encontrado, id: " + id);
+            }
+        } catch (Exception e){
+            throw new RuntimeException("Veículo não pode ser excluído, id: " + id);
         }
     }
 }
