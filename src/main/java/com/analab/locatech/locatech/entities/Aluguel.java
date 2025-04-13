@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class Aluguel {
     private Long id;
     private Long pessoaId;
-    private String pessoaCPF;
+    private String pessoaCpf;
     private String pessoaNome;
     private Long veiculoId;
     private String veiculoModelo;

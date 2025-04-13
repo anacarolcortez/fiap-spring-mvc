@@ -27,8 +27,8 @@ public class PessoaController {
             @RequestParam("page") int page,
             @RequestParam("size") int size){
         logger.info("GET /pessoas");
-        var Pessoas = this.pessoaService.findAllPessoas(page, size);
-        return ResponseEntity.ok(Pessoas);
+        var pessoas = this.pessoaService.findAllPessoas(page, size);
+        return ResponseEntity.ok(pessoas);
     }
 
     @GetMapping("/{id}")
