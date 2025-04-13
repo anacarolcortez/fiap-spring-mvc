@@ -3,6 +3,7 @@ package com.analab.locatech.locatech.controllers;
 import com.analab.locatech.locatech.dtos.PessoaRequestDTO;
 import com.analab.locatech.locatech.entities.Pessoa;
 import com.analab.locatech.locatech.services.PessoaService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,7 @@ public class PessoaController {
     }
 
     @PostMapping()
-    public ResponseEntity<Void> savePessoa(@RequestBody PessoaRequestDTO pessoa){
+    public ResponseEntity<Void> savePessoa(@Valid @RequestBody PessoaRequestDTO pessoa){
         logger.info("POST /pessoas");
         this.pessoaService.savePessoa(pessoa);
         return ResponseEntity.status(201).build();
@@ -48,7 +49,7 @@ public class PessoaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updatePessoa(@PathVariable("id") Long id,
-                                              @RequestBody PessoaRequestDTO pessoa){
+                                             @Valid @RequestBody PessoaRequestDTO pessoa){
         logger.info("PUT /pessoas/" + id);
         this.pessoaService.updatePessoa(pessoa, id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

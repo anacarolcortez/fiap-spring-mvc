@@ -3,6 +3,7 @@ package com.analab.locatech.locatech.controllers;
 import com.analab.locatech.locatech.dtos.AluguelRequestDTO;
 import com.analab.locatech.locatech.entities.Aluguel;
 import com.analab.locatech.locatech.services.AluguelService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,7 @@ public class AluguelController {
     }
 
     @PostMapping()
-    public ResponseEntity<Void> saveAluguel(@RequestBody AluguelRequestDTO aluguel){
+    public ResponseEntity<Void> saveAluguel(@Valid @RequestBody AluguelRequestDTO aluguel){
         logger.info("POST /alugueis");
         this.aluguelService.saveAluguel(aluguel);
         return ResponseEntity.status(201).build();
@@ -48,7 +49,7 @@ public class AluguelController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateAluguel(@PathVariable("id") Long id,
-                                              @RequestBody AluguelRequestDTO aluguel){
+                                              @Valid @RequestBody AluguelRequestDTO aluguel){
         logger.info("PUT /alugueis/" + id);
         this.aluguelService.updateAluguel(aluguel, id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
