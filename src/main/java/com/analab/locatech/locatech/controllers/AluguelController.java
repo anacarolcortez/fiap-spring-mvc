@@ -1,8 +1,10 @@
 package com.analab.locatech.locatech.controllers;
 
+import com.analab.locatech.locatech.controllers.docs.AluguelApiDoc;
 import com.analab.locatech.locatech.dtos.AluguelRequestDTO;
 import com.analab.locatech.locatech.entities.Aluguel;
 import com.analab.locatech.locatech.services.AluguelService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +16,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/alugueis")
-public class AluguelController {
+@Tag(name = "Alugueis", description = "Recurso para gestão de alugueis")
+public class AluguelController implements AluguelApiDoc {
 
     private static final Logger logger = LoggerFactory.getLogger(AluguelController.class);
 
@@ -24,6 +27,7 @@ public class AluguelController {
         this.aluguelService = aluguelService;
     }
 
+    @Override
     @GetMapping
     public ResponseEntity<List<Aluguel>> findAllAlugueis(
             @RequestParam("page") int page,
@@ -33,6 +37,7 @@ public class AluguelController {
         return ResponseEntity.ok(alugueis);
     }
 
+    @Override
     @GetMapping("/{id}")
     public ResponseEntity<Aluguel> findAluguel(@PathVariable("id") Long id){
         logger.info("GET /alugueis/" + id);
@@ -40,6 +45,7 @@ public class AluguelController {
         return aluguel.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
+    @Override
     @PostMapping()
     public ResponseEntity<Void> saveAluguel(@Valid @RequestBody AluguelRequestDTO aluguel){
         logger.info("POST /alugueis");
@@ -47,6 +53,7 @@ public class AluguelController {
         return ResponseEntity.status(201).build();
     }
 
+    @Override
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateAluguel(@PathVariable("id") Long id,
                                               @Valid @RequestBody AluguelRequestDTO aluguel){
@@ -55,8 +62,9 @@ public class AluguelController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @Override
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePessoa(@PathVariable("id") Long id){
+    public ResponseEntity<Void> deleteAluguel(@PathVariable("id") Long id){
         logger.info("DELETE /alugueis/" + id);
         this.aluguelService.deleteAluguel(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

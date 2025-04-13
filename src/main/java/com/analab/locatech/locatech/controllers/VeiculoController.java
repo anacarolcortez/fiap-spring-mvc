@@ -1,12 +1,13 @@
 package com.analab.locatech.locatech.controllers;
 
+import com.analab.locatech.locatech.controllers.docs.VeiculoApiDoc;
 import com.analab.locatech.locatech.dtos.VeiculoRequestDTO;
 import com.analab.locatech.locatech.entities.Veiculo;
 import com.analab.locatech.locatech.services.VeiculoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,51 +15,55 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/veiculos")
-public class VeiculoController {
+@Tag(name = "Veículos", description = "Recurso para gestão de veículos")
+public class VeiculoController implements VeiculoApiDoc {
 
     private static final Logger logger = LoggerFactory.getLogger(VeiculoController.class);
-
     private final VeiculoService veiculoService;
 
     public VeiculoController(VeiculoService veiculoService) {
         this.veiculoService = veiculoService;
     }
 
+    @Override
     @GetMapping
-    public ResponseEntity<List<Veiculo>> findAllVeiculos(
-            @RequestParam("page") int page,
-            @RequestParam("size") int size){
+    public ResponseEntity<List<Veiculo>> findAllVeiculos(int page, int size) {
         logger.info("GET /veículos");
-        var veiculos = this.veiculoService.findAllVeiculos(page, size);
+        var veiculos = veiculoService.findAllVeiculos(page, size);
         return ResponseEntity.ok(veiculos);
     }
 
+    @Override
     @GetMapping("/{id}")
-    public ResponseEntity<Veiculo> findVeiculos(@PathVariable("id") Long id){
+    public ResponseEntity<Veiculo> findVeiculos(Long id) {
         logger.info("GET /veiculos/" + id);
-        var veiculo = this.veiculoService.findVeiculoById(id);
-        return veiculo.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
+        var veiculo = veiculoService.findVeiculoById(id);
+        return veiculo.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
-    @PostMapping()
-    public ResponseEntity<Void> saveVeiculo(@Valid @RequestBody VeiculoRequestDTO veiculo){
+    @Override
+    @PostMapping
+    public ResponseEntity<Void> saveVeiculo(@Valid @RequestBody VeiculoRequestDTO veiculo) {
         logger.info("POST /veiculos");
-        this.veiculoService.saveVeiculo(veiculo);
+        veiculoService.saveVeiculo(veiculo);
         return ResponseEntity.status(201).build();
     }
 
+    @Override
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateVeiculo(@PathVariable("id") Long id,
-                                              @Valid @RequestBody VeiculoRequestDTO veiculo){
+    public ResponseEntity<Void> updateVeiculo(Long id, @Valid @RequestBody VeiculoRequestDTO veiculo) {
         logger.info("PUT /veiculos/" + id);
-        this.veiculoService.updateVeiculo(veiculo, id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        veiculoService.updateVeiculo(veiculo, id);
+        return ResponseEntity.noContent().build();
     }
 
+    @Override
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteVeiculo(@PathVariable("id") Long id){
+    public ResponseEntity<Void> deleteVeiculo(Long id) {
         logger.info("DELETE /veiculos/" + id);
-        this.veiculoService.deleteVeiculo(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        veiculoService.deleteVeiculo(id);
+        return ResponseEntity.noContent().build();
     }
 }
+

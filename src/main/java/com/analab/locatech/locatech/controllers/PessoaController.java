@@ -1,8 +1,10 @@
 package com.analab.locatech.locatech.controllers;
 
+import com.analab.locatech.locatech.controllers.docs.PessoaApiDoc;
 import com.analab.locatech.locatech.dtos.PessoaRequestDTO;
 import com.analab.locatech.locatech.entities.Pessoa;
 import com.analab.locatech.locatech.services.PessoaService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +16,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/pessoas")
-public class PessoaController {
+@Tag(name = "Pessoas", description = "Recurso para gestão de pessoas (clientes)")
+public class PessoaController implements PessoaApiDoc {
 
     private static final Logger logger = LoggerFactory.getLogger(PessoaController.class);
 
@@ -24,6 +27,7 @@ public class PessoaController {
         this.pessoaService = pessoaService;
     }
 
+    @Override
     @GetMapping
     public ResponseEntity<List<Pessoa>> findAllPessoas(
             @RequestParam("page") int page,
@@ -40,6 +44,7 @@ public class PessoaController {
         return pessoa.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
+    @Override
     @PostMapping()
     public ResponseEntity<Void> savePessoa(@Valid @RequestBody PessoaRequestDTO pessoa){
         logger.info("POST /pessoas");
@@ -47,6 +52,7 @@ public class PessoaController {
         return ResponseEntity.status(201).build();
     }
 
+    @Override
     @PutMapping("/{id}")
     public ResponseEntity<Void> updatePessoa(@PathVariable("id") Long id,
                                              @Valid @RequestBody PessoaRequestDTO pessoa){
@@ -55,6 +61,7 @@ public class PessoaController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePessoa(@PathVariable("id") Long id){
         logger.info("DELETE /pessoas/" + id);
